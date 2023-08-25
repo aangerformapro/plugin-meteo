@@ -2,17 +2,10 @@
 import VanillaAutoComplete from './vanilla-autocomplete.js';
 
 
-const data = JSON.parse(document.querySelector('#data-communes').innerHTML), map = new Map();
+const map = new Map(
+    JSON.parse(document.querySelector('#data-communes').innerHTML)
+);
 
-
-data.forEach((item) =>
-{
-
-    map.set(`${item.nom} (${item.departement})`, item);
-
-});
-
-document.querySelector('#add-shortcode-form')?.addEventListener('submit', e => e.preventDefault());
 
 
 const
@@ -48,11 +41,14 @@ inputCity?.addEventListener('change', e =>
     if (!selectedEntry)
     {
         inputShortcode.value = '';
+        inputShortcode.disabled = true;
         copyBtn.disabled = true;
     }
 
     else
     {
+
+        inputShortcode.disabled = null;
         inputShortcode.value = `[meteo ville="${selectedEntry.nom}"]`;
         copyBtn.disabled = null;
     }
@@ -67,8 +63,6 @@ copyBtn?.addEventListener("click", e =>
     inputShortcode.select();
     inputShortcode.setSelectionRange(0, 99999);
 
-
-
     try
     {
         navigator.clipboard.writeText(inputShortcode.value);
@@ -77,10 +71,8 @@ copyBtn?.addEventListener("click", e =>
         document.execCommand('copy');
     }
 
-
-
     copyBtn.disabled = true;
-
 
 });
 
+document.querySelector('#add-shortcode-form')?.addEventListener('submit', e => e.preventDefault());

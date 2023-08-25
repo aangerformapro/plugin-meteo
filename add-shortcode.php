@@ -21,7 +21,18 @@ function get_communes_as_json()
         'departement' => mb_substr($item['code'], 0, 2),
     ] + $item, $data);
 
-    return $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $newdata     = array_map(fn ($item) => [
+        sprintf(
+            '%s (%s)',
+            $item['nom'],
+            mb_substr((string) $item['code'], 0, 2)
+        ), $item,
+    ], $data);
+
+    return $json = json_encode(
+        $newdata,
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+    );
 }
 
 ?>
@@ -41,7 +52,7 @@ function get_communes_as_json()
             <tr>
                 <th scope="row">Shortcode</th>
                 <td>
-                    <textarea name="meteo_shortcode"></textarea>
+                    <textarea name="meteo_shortcode" disabled></textarea>
                 </td>
             </tr>
 
